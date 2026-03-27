@@ -1,0 +1,911 @@
+'use client'
+
+import { useState } from 'react'
+
+// ============================================
+// ICONOS SVG INLINE
+// ============================================
+
+const IconShield = ({ className = "w-6 h-6" }: { className?: string }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+  </svg>
+)
+
+const IconChart = ({ className = "w-6 h-6" }: { className?: string }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+  </svg>
+)
+
+const IconGlobe = ({ className = "w-6 h-6" }: { className?: string }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
+  </svg>
+)
+
+const IconLightning = ({ className = "w-6 h-6" }: { className?: string }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+  </svg>
+)
+
+const IconUsers = ({ className = "w-6 h-6" }: { className?: string }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+  </svg>
+)
+
+const IconDocument = ({ className = "w-6 h-6" }: { className?: string }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+  </svg>
+)
+
+const IconCheck = ({ className = "w-6 h-6" }: { className?: string }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+  </svg>
+)
+
+const IconWarning = ({ className = "w-6 h-6" }: { className?: string }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+  </svg>
+)
+
+const IconClock = ({ className = "w-6 h-6" }: { className?: string }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+)
+
+const IconArrowRight = ({ className = "w-5 h-5" }: { className?: string }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+  </svg>
+)
+
+const IconLock = ({ className = "w-6 h-6" }: { className?: string }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+  </svg>
+)
+
+const IconChevronDown = ({ className = "w-5 h-5" }: { className?: string }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+  </svg>
+)
+
+// ============================================
+// COMPONENTE RISKOMETRO
+// ============================================
+
+function Riskometro() {
+  const [formData, setFormData] = useState({
+    actividad: '',
+    facturacion: '',
+    actividadAnterior: '',
+    paises: '',
+    seguros: ''
+  })
+
+  const riskLevel = 75 // Simulado - Alto riesgo
+
+  return (
+    <div className="bg-gradient-to-br from-brand-950 via-brand-900 to-brand-800 rounded-3xl p-8 md:p-12 text-white relative overflow-hidden">
+      {/* Decoración de fondo */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-accent-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+      <div className="absolute bottom-0 left-0 w-64 h-64 bg-risk-high/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+
+      <div className="relative z-10">
+        <div className="text-center mb-8">
+          <span className="inline-block px-4 py-1.5 bg-white/10 rounded-full text-sm font-medium mb-4">
+            riskometro
+          </span>
+          <h2 className="text-2xl md:text-3xl font-bold mb-3">
+            Si hoy tuvieras un siniestro relevante, ¿tu cobertura actual aguantaría el negocio que tienes ahora?
+          </h2>
+          <p className="text-brand-200 max-w-2xl mx-auto">
+            Comprueba en segundos si tu seguro sigue alineado con la realidad de tu empresa.
+          </p>
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+          {/* Panel de indicadores */}
+          <div className="space-y-6">
+            {/* Indicador principal circular */}
+            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <p className="text-brand-300 text-sm mb-1">Nivel de riesgo estimado</p>
+                  <p className="text-3xl font-bold text-risk-high">Alto</p>
+                </div>
+                <div className="relative w-24 h-24">
+                  <svg className="w-24 h-24 -rotate-90" viewBox="0 0 100 100">
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="45"
+                      fill="none"
+                      stroke="rgba(255,255,255,0.1)"
+                      strokeWidth="8"
+                    />
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="45"
+                      fill="none"
+                      stroke="#ef4444"
+                      strokeWidth="8"
+                      strokeLinecap="round"
+                      strokeDasharray={`${riskLevel * 2.83} 283`}
+                      className="transition-all duration-1000"
+                    />
+                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-2xl font-bold">{riskLevel}%</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Métricas secundarias */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-white/5 rounded-xl p-4">
+                  <p className="text-brand-400 text-xs uppercase tracking-wider mb-1">Desalineación</p>
+                  <p className="text-xl font-semibold text-amber-400">Probable</p>
+                </div>
+                <div className="bg-white/5 rounded-xl p-4">
+                  <p className="text-brand-400 text-xs uppercase tracking-wider mb-1">Impacto potencial</p>
+                  <p className="text-xl font-semibold text-risk-high">Significativo</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Escenario de impacto */}
+            <div className="bg-risk-high/10 border border-risk-high/30 rounded-2xl p-6">
+              <div className="flex items-start gap-4">
+                <div className="p-2 bg-risk-high/20 rounded-lg shrink-0">
+                  <IconWarning className="w-6 h-6 text-risk-high" />
+                </div>
+                <div>
+                  <p className="font-semibold text-white mb-2">Peor escenario razonable</p>
+                  <p className="text-brand-200 text-sm leading-relaxed">
+                    Si ocurre un siniestro relevante con coberturas desalineadas, podrías enfrentarte a rechazos de indemnización, sublímites insuficientes o exclusiones no previstas. El coste puede superar varias veces la facturación mensual.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Mini formulario de diagnóstico */}
+          <div className="bg-white rounded-2xl p-6 md:p-8 text-brand-900">
+            <h3 className="text-lg font-semibold mb-6">Empieza tu diagnóstico</h3>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-brand-700 mb-1.5">
+                  Actividad actual
+                </label>
+                <select
+                  className="w-full px-4 py-3 bg-brand-50 border border-brand-200 rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-transparent transition-all"
+                  value={formData.actividad}
+                  onChange={(e) => setFormData({...formData, actividad: e.target.value})}
+                >
+                  <option value="">Selecciona tu sector</option>
+                  <option value="saas">SaaS / Software</option>
+                  <option value="marketplace">B2B Marketplace</option>
+                  <option value="ecommerce">E-commerce</option>
+                  <option value="fintech">FinTech</option>
+                  <option value="agencia">Agencia / Servicios</option>
+                  <option value="ai">AI / Machine Learning</option>
+                  <option value="eventos">Organización de eventos</option>
+                  <option value="otro">Otro</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-brand-700 mb-1.5">
+                  Facturación actual anual
+                </label>
+                <select
+                  className="w-full px-4 py-3 bg-brand-50 border border-brand-200 rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-transparent transition-all"
+                  value={formData.facturacion}
+                  onChange={(e) => setFormData({...formData, facturacion: e.target.value})}
+                >
+                  <option value="">Selecciona un rango</option>
+                  <option value="0-100k">Menos de 100.000 €</option>
+                  <option value="100k-500k">100.000 € - 500.000 €</option>
+                  <option value="500k-1m">500.000 € - 1M €</option>
+                  <option value="1m-5m">1M € - 5M €</option>
+                  <option value="5m+">Más de 5M €</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-brand-700 mb-1.5">
+                  Países donde operas
+                </label>
+                <select
+                  className="w-full px-4 py-3 bg-brand-50 border border-brand-200 rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-transparent transition-all"
+                  value={formData.paises}
+                  onChange={(e) => setFormData({...formData, paises: e.target.value})}
+                >
+                  <option value="">Selecciona una opción</option>
+                  <option value="espana">Solo España</option>
+                  <option value="ue">España + UE</option>
+                  <option value="internacional">Internacional (fuera UE)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-brand-700 mb-1.5">
+                  ¿Cuándo contrataste tus seguros actuales?
+                </label>
+                <select
+                  className="w-full px-4 py-3 bg-brand-50 border border-brand-200 rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-transparent transition-all"
+                  value={formData.seguros}
+                  onChange={(e) => setFormData({...formData, seguros: e.target.value})}
+                >
+                  <option value="">Selecciona una opción</option>
+                  <option value="menos1">Hace menos de 1 año</option>
+                  <option value="1-2">Hace 1-2 años</option>
+                  <option value="2-3">Hace 2-3 años</option>
+                  <option value="mas3">Hace más de 3 años</option>
+                  <option value="nosabe">No estoy seguro</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="mt-6 pt-6 border-t border-brand-100">
+              <a
+                href="#solicitar"
+                className="w-full btn-primary flex items-center justify-center gap-2"
+              >
+                Ver mi evaluación completa
+                <IconArrowRight className="w-5 h-5" />
+              </a>
+              <p className="text-xs text-brand-500 text-center mt-3">
+                Revisión experta de 30 minutos por 99 €
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ============================================
+// COMPONENTE FAQ
+// ============================================
+
+function FAQItem({ question, answer }: { question: string; answer: string }) {
+  const [isOpen, setIsOpen] = useState(false)
+
+  return (
+    <div className="border-b border-brand-100 last:border-0">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full py-5 flex items-start justify-between gap-4 text-left"
+      >
+        <span className="font-medium text-brand-900">{question}</span>
+        <IconChevronDown
+          className={`w-5 h-5 text-brand-500 shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+        />
+      </button>
+      <div className={`overflow-hidden transition-all duration-200 ${isOpen ? 'max-h-96 pb-5' : 'max-h-0'}`}>
+        <p className="text-brand-600 leading-relaxed">{answer}</p>
+      </div>
+    </div>
+  )
+}
+
+// ============================================
+// PÁGINA PRINCIPAL
+// ============================================
+
+export default function Home() {
+  const faqs = [
+    {
+      question: '¿Esto sustituye a mi corredor actual?',
+      answer: 'No. La Revisión de Riesgo Real es un servicio de diagnóstico independiente. No vendemos pólizas ni competimos con tu corredor. Si detectamos desalineaciones, te orientamos sobre cómo abordarlas, pero la decisión de cambiar de proveedor o renegociar siempre es tuya.'
+    },
+    {
+      question: '¿Qué ocurre en la revisión de 30 minutos?',
+      answer: 'Analizamos contigo tu actividad actual, facturación, operaciones y coberturas contratadas. Identificamos posibles gaps entre lo que hace tu empresa hoy y lo que cubren tus pólizas. Al terminar, te llevas una primera evaluación con recomendaciones y primeros pasos claros.'
+    },
+    {
+      question: '¿Esto es para cualquier empresa?',
+      answer: 'No. Está pensado para startups y negocios de alto crecimiento en España que han evolucionado significativamente desde que contrataron sus seguros: han pivotado, crecido en facturación, expandido operaciones o cambiado de modelo de negocio.'
+    },
+    {
+      question: '¿Qué pasa si ya tengo pólizas contratadas?',
+      answer: 'Precisamente ahí está el valor. Revisamos si tus pólizas actuales siguen encajando con tu negocio real. Muchas empresas mantienen coberturas diseñadas para una etapa anterior sin saberlo.'
+    },
+    {
+      question: '¿Me vais a vender un seguro durante la llamada?',
+      answer: 'No. La revisión es puramente diagnóstica. Si identificamos necesidades, te orientamos sobre qué tipo de solución buscar, pero no vendemos productos durante la llamada ni después como parte de este servicio.'
+    },
+    {
+      question: '¿Qué ocurre después de la revisión?',
+      answer: 'Te llevas una evaluación inicial con recomendaciones concretas. Si necesitas ayuda adicional para implementar cambios o profundizar en el análisis, podemos hablar de servicios complementarios, pero no hay ningún compromiso.'
+    },
+    {
+      question: '¿Por qué es de pago?',
+      answer: 'Porque estás pagando por criterio experto aplicado a tu caso concreto, no por una plantilla genérica. Los 30 minutos de revisión están respaldados por más de 10 años de experiencia en seguros y más de 5 en el ecosistema startup.'
+    },
+    {
+      question: '¿Qué tipo de información tengo que compartir?',
+      answer: 'Para aprovechar al máximo la revisión, ayuda tener a mano información sobre tu actividad actual, facturación aproximada y, si es posible, un resumen de tus pólizas vigentes. No necesitamos documentación exhaustiva para la primera evaluación.'
+    }
+  ]
+
+  return (
+    <main className="min-h-screen">
+      {/* ============================================ */}
+      {/* TOP BAR */}
+      {/* ============================================ */}
+      <div className="bg-brand-950 text-white py-2.5">
+        <div className="container-wide text-center">
+          <p className="text-sm font-medium">
+            <span className="text-brand-300">Para</span>{' '}
+            <span className="text-white">startups y negocios de alto crecimiento</span>{' '}
+            <span className="text-brand-300">en España</span>
+          </p>
+        </div>
+      </div>
+
+      {/* ============================================ */}
+      {/* HEADER */}
+      {/* ============================================ */}
+      <header className="bg-white border-b border-brand-100 sticky top-0 z-50">
+        <div className="container-wide py-4 flex items-center justify-between">
+          <a href="/" className="flex items-center gap-2">
+            <IconShield className="w-8 h-8 text-brand-900" />
+            <span className="text-xl font-bold text-brand-900">segurostartup</span>
+          </a>
+          <a href="#solicitar" className="hidden sm:inline-flex btn-primary text-sm py-2.5 px-5">
+            Solicitar revisión
+          </a>
+        </div>
+      </header>
+
+      {/* ============================================ */}
+      {/* HERO */}
+      {/* ============================================ */}
+      <section className="bg-gradient-to-b from-brand-50 to-white section-padding">
+        <div className="container-wide">
+          <div className="max-w-4xl mx-auto text-center mb-12 md:mb-16">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-brand-900 mb-6 text-balance leading-tight">
+              Tu empresa ha cambiado.{' '}
+              <span className="text-brand-600">Tu seguro, probablemente no.</span>
+            </h1>
+            <p className="text-xl md:text-2xl text-brand-600 mb-8 max-w-3xl mx-auto text-balance">
+              Ayudamos a startups y negocios de alto crecimiento a detectar si sus coberturas siguen encajando con su actividad real, su facturación actual y su nivel de riesgo.
+            </p>
+
+            {/* Precio y CTA */}
+            <div className="inline-flex flex-col sm:flex-row items-center gap-4 sm:gap-6 bg-white rounded-2xl p-4 sm:p-6 shadow-lg border border-brand-100">
+              <div className="text-center sm:text-left">
+                <p className="text-sm text-brand-500 mb-1">Revisión de Riesgo Real</p>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-4xl font-bold text-brand-900">99 €</span>
+                  <span className="text-brand-500">· 30 minutos · videollamada</span>
+                </div>
+              </div>
+              <a href="#solicitar" className="btn-primary whitespace-nowrap">
+                Solicita tu revisión experta de treinta minutos
+              </a>
+            </div>
+
+            {/* Microfrase de autoridad */}
+            <p className="mt-6 text-sm text-brand-500">
+              Más de 10 años en seguros. Más de 5 en startups. Visión actuarial + mentalidad founder.
+            </p>
+          </div>
+
+          {/* RISKOMETRO */}
+          <Riskometro />
+        </div>
+      </section>
+
+      {/* ============================================ */}
+      {/* SEÑALES DE ALERTA */}
+      {/* ============================================ */}
+      <section className="section-padding bg-white">
+        <div className="container-wide">
+          <div className="max-w-3xl mx-auto text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-brand-900 mb-4">
+              Señales de que necesitas revisar tu seguro
+            </h2>
+            <p className="text-lg text-brand-600">
+              Si alguna de estas situaciones te suena, probablemente tu póliza describe una empresa que ya no existe.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                icon: <IconLightning className="w-6 h-6" />,
+                title: 'Has pivotado',
+                description: 'Empezaste con un modelo de negocio y hoy haces algo diferente. Tu seguro sigue anclado al pasado.'
+              },
+              {
+                icon: <IconChart className="w-6 h-6" />,
+                title: 'Tu facturación se ha multiplicado',
+                description: 'Pasaste de 40.000 € a cerca de 2 millones, pero tus capitales asegurados no crecieron contigo.'
+              },
+              {
+                icon: <IconUsers className="w-6 h-6" />,
+                title: 'Vendes a clientes más grandes',
+                description: 'Antes eran pymes, ahora son corporaciones que exigen garantías. Tu RC puede quedarse corta.'
+              },
+              {
+                icon: <IconGlobe className="w-6 h-6" />,
+                title: 'Operas en varios países',
+                description: 'Empezaste solo en España y hoy tienes clientes en UE o fuera. ¿Tu cobertura territorial lo refleja?'
+              },
+              {
+                icon: <IconDocument className="w-6 h-6" />,
+                title: 'Tu actividad declarada no coincide',
+                description: 'Lo que dice tu póliza sobre tu actividad ya no tiene nada que ver con lo que haces realmente.'
+              },
+              {
+                icon: <IconClock className="w-6 h-6" />,
+                title: 'Llevas años sin revisar',
+                description: 'Contrataste en una etapa anterior y desde entonces solo has renovado automáticamente.'
+              }
+            ].map((item, index) => (
+              <div key={index} className="card group">
+                <div className="p-3 bg-brand-100 rounded-xl w-fit mb-4 group-hover:bg-brand-200 transition-colors">
+                  <span className="text-brand-700">{item.icon}</span>
+                </div>
+                <h3 className="text-lg font-semibold text-brand-900 mb-2">{item.title}</h3>
+                <p className="text-brand-600">{item.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================ */}
+      {/* POR QUÉ PASA */}
+      {/* ============================================ */}
+      <section className="section-padding bg-brand-50">
+        <div className="container-narrow">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-brand-900 mb-4">
+              Los negocios cambian más rápido de lo que cambian sus seguros
+            </h2>
+          </div>
+
+          <div className="bg-white rounded-2xl p-8 md:p-12 shadow-sm border border-brand-100">
+            <div className="prose prose-lg max-w-none text-brand-700">
+              <p className="text-xl leading-relaxed mb-6">
+                Cuando arrancas una empresa, contratas un seguro pensando en lo que eres en ese momento: una actividad concreta, una facturación previsible, un mercado local, unos riesgos conocidos.
+              </p>
+              <p className="text-xl leading-relaxed mb-6">
+                Pero las startups pivotan. Crecen. Cambian de modelo. Entran en nuevos mercados. Firman con clientes que les exigen garantías que antes no necesitaban.
+              </p>
+              <p className="text-xl leading-relaxed mb-6">
+                <strong className="text-brand-900">El problema es que el seguro rara vez acompaña esos cambios.</strong>
+              </p>
+              <p className="text-xl leading-relaxed">
+                La póliza se renueva automáticamente año tras año describiendo una empresa que ya no existe. Y cuando llega un siniestro serio, te das cuenta de que tus coberturas no aguantan el negocio que tienes hoy.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================ */}
+      {/* TIPOS DE NEGOCIO */}
+      {/* ============================================ */}
+      <section className="section-padding bg-white">
+        <div className="container-wide">
+          <div className="max-w-3xl mx-auto text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-brand-900 mb-4">
+              Un problema transversal en todo el ecosistema
+            </h2>
+            <p className="text-lg text-brand-600">
+              No importa el sector. Si tu negocio ha evolucionado, el riesgo de desalineación existe.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+            {[
+              { name: 'SaaS', icon: '💻' },
+              { name: 'B2B Marketplaces', icon: '🔗' },
+              { name: 'E-commerce', icon: '🛒' },
+              { name: 'FinTech', icon: '💳' },
+              { name: 'Agencias', icon: '📊' },
+              { name: 'Servicios Tech', icon: '⚙️' },
+              { name: 'AI', icon: '🤖' },
+              { name: 'Eventos', icon: '🎪' }
+            ].map((sector, index) => (
+              <div key={index} className="bg-brand-50 rounded-xl p-6 text-center hover:bg-brand-100 transition-colors border border-transparent hover:border-brand-200">
+                <span className="text-3xl mb-3 block">{sector.icon}</span>
+                <span className="font-medium text-brand-800">{sector.name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================ */}
+      {/* CÓMO FUNCIONA */}
+      {/* ============================================ */}
+      <section className="section-padding bg-brand-950 text-white">
+        <div className="container-wide">
+          <div className="max-w-3xl mx-auto text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Cómo funciona
+            </h2>
+            <p className="text-lg text-brand-300">
+              Tres pasos. Treinta minutos. Claridad sobre tu situación real.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                step: '01',
+                title: 'Solicitas tu revisión',
+                description: 'Reservas una videollamada de 30 minutos y compartes información básica sobre tu negocio actual.'
+              },
+              {
+                step: '02',
+                title: 'Analizamos juntos',
+                description: 'Revisamos contigo tu actividad real, facturación actual, operaciones y coberturas vigentes.'
+              },
+              {
+                step: '03',
+                title: 'Te llevas claridad',
+                description: 'Sales con una primera evaluación experta, recomendaciones concretas y primeros pasos accionables.'
+              }
+            ].map((item, index) => (
+              <div key={index} className="relative">
+                <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 h-full">
+                  <span className="text-5xl font-bold text-white/10 mb-4 block">{item.step}</span>
+                  <h3 className="text-xl font-semibold text-white mb-3">{item.title}</h3>
+                  <p className="text-brand-300">{item.description}</p>
+                </div>
+                {index < 2 && (
+                  <div className="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2">
+                    <IconArrowRight className="w-8 h-8 text-white/20" />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================ */}
+      {/* QUÉ OBTIENES */}
+      {/* ============================================ */}
+      <section className="section-padding bg-white">
+        <div className="container-wide">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-bold text-brand-900 mb-6">
+                Qué incluye la Revisión de Riesgo Real
+              </h2>
+              <p className="text-lg text-brand-600 mb-8">
+                99 € por 30 minutos de criterio experto aplicado a tu caso concreto. Esto es lo que te llevas:
+              </p>
+
+              <ul className="space-y-4">
+                {[
+                  'Primera evaluación experta de tu situación actual',
+                  'Visión externa y técnica de tus coberturas',
+                  'Detección inicial de posibles desalineaciones',
+                  'Recomendación clara sobre cómo proceder',
+                  'Primeros pasos accionables para corregir gaps'
+                ].map((item, index) => (
+                  <li key={index} className="flex items-start gap-3">
+                    <span className="p-1 bg-green-100 rounded-full shrink-0 mt-0.5">
+                      <IconCheck className="w-4 h-4 text-green-600" />
+                    </span>
+                    <span className="text-brand-700">{item}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-8 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+                <p className="text-sm text-amber-800">
+                  <strong>Importante:</strong> Esto no es una auditoría profunda ni un análisis exhaustivo. Es una primera evaluación experta para determinar si tienes un problema serio y orientarte sobre los siguientes pasos.
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-brand-50 rounded-2xl p-8 md:p-10">
+              <div className="text-center">
+                <p className="text-sm font-medium text-brand-500 uppercase tracking-wider mb-2">Revisión de Riesgo Real</p>
+                <div className="flex items-baseline justify-center gap-2 mb-4">
+                  <span className="text-5xl font-bold text-brand-900">99 €</span>
+                </div>
+                <div className="flex items-center justify-center gap-4 text-brand-600 mb-8">
+                  <span className="flex items-center gap-1.5">
+                    <IconClock className="w-5 h-5" />
+                    30 minutos
+                  </span>
+                  <span>·</span>
+                  <span>Videollamada</span>
+                </div>
+                <a href="#solicitar" className="btn-primary w-full justify-center text-lg py-5">
+                  Solicita tu revisión experta de treinta minutos
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================ */}
+      {/* POR QUÉ SEGUROSTARTUP */}
+      {/* ============================================ */}
+      <section className="section-padding bg-brand-50">
+        <div className="container-wide">
+          <div className="max-w-3xl mx-auto text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-brand-900 mb-4">
+              Por qué segurostartup
+            </h2>
+            <p className="text-lg text-brand-600">
+              No somos un comparador. No somos una correduría tradicional. Somos especialistas en un problema muy específico.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div className="card">
+              <h3 className="text-xl font-semibold text-brand-900 mb-4">Visión actuarial real</h3>
+              <p className="text-brand-600">
+                Más de 10 años trabajando en el sector asegurador. Entendemos cómo funcionan las pólizas por dentro, no solo cómo se venden.
+              </p>
+            </div>
+            <div className="card">
+              <h3 className="text-xl font-semibold text-brand-900 mb-4">Experiencia startup real</h3>
+              <p className="text-brand-600">
+                Más de 5 años en el ecosistema startup. Sabemos lo que significa pivotar, crecer rápido y operar con incertidumbre.
+              </p>
+            </div>
+            <div className="card">
+              <h3 className="text-xl font-semibold text-brand-900 mb-4">Hablamos tu idioma</h3>
+              <p className="text-brand-600">
+                Podemos hablar el lenguaje del founder y el lenguaje del seguro al mismo tiempo. Traducimos entre los dos mundos.
+              </p>
+            </div>
+            <div className="card">
+              <h3 className="text-xl font-semibold text-brand-900 mb-4">Sin plantillas genéricas</h3>
+              <p className="text-brand-600">
+                No aplicamos un cuestionario estándar de correduría. Miramos tu negocio real y tus riesgos reales.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================ */}
+      {/* POR QUÉ NO UN BOT */}
+      {/* ============================================ */}
+      <section className="section-padding bg-white">
+        <div className="container-narrow">
+          <div className="bg-brand-900 text-white rounded-2xl p-8 md:p-12">
+            <div className="max-w-2xl mx-auto text-center">
+              <h2 className="text-2xl md:text-3xl font-bold mb-6">
+                Por qué esto no lo hace un bot genérico
+              </h2>
+              <p className="text-lg text-brand-200 mb-6">
+                Detectar que hay un gap entre tu negocio y tu seguro puede parecer fácil. Cualquier checklist te lo puede sugerir.
+              </p>
+              <p className="text-lg text-brand-200 mb-6">
+                Pero decidir <strong className="text-white">qué solución es la correcta para tu caso concreto</strong> requiere criterio experto: conocimiento del mercado asegurador, comprensión de cómo evolucionan las startups y capacidad de priorizar.
+              </p>
+              <p className="text-lg text-white font-medium">
+                Por eso la revisión la hace una persona con formación actuarial y experiencia real en ambos mundos.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================ */}
+      {/* CASOS TIPO */}
+      {/* ============================================ */}
+      <section className="section-padding bg-brand-50">
+        <div className="container-wide">
+          <div className="max-w-3xl mx-auto text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-brand-900 mb-4">
+              Situaciones reales que hemos visto
+            </h2>
+            <p className="text-lg text-brand-600">
+              Casos anónimos de empresas que tenían coberturas desalineadas sin saberlo.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="bg-white rounded-2xl p-8 border border-brand-100">
+              <div className="w-12 h-12 bg-brand-100 rounded-xl flex items-center justify-center mb-6">
+                <span className="text-2xl">🎪</span>
+              </div>
+              <h3 className="text-lg font-semibold text-brand-900 mb-3">
+                Organizadora de eventos que creció rápido
+              </h3>
+              <p className="text-brand-600 mb-4">
+                Pasó de eventos locales pequeños a operaciones complejas en varios países europeos. Su RC seguía teniendo cobertura territorial solo para España y límites pensados para eventos de 50 personas.
+              </p>
+              <p className="text-sm text-brand-500 font-medium">
+                Desalineación detectada: cobertura territorial + límites insuficientes
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl p-8 border border-brand-100">
+              <div className="w-12 h-12 bg-brand-100 rounded-xl flex items-center justify-center mb-6">
+                <span className="text-2xl">🔗</span>
+              </div>
+              <h3 className="text-lg font-semibold text-brand-900 mb-3">
+                De servicio tradicional a marketplace B2B
+              </h3>
+              <p className="text-brand-600 mb-4">
+                Empezó como consultoría y pivotó a plataforma que conecta proveedores y compradores. Su seguro seguía describiendo "servicios de asesoramiento" sin mencionar intermediación ni responsabilidad de plataforma.
+              </p>
+              <p className="text-sm text-brand-500 font-medium">
+                Desalineación detectada: actividad declarada incorrecta
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl p-8 border border-brand-100">
+              <div className="w-12 h-12 bg-brand-100 rounded-xl flex items-center justify-center mb-6">
+                <span className="text-2xl">📈</span>
+              </div>
+              <h3 className="text-lg font-semibold text-brand-900 mb-3">
+                SaaS que multiplicó facturación por 20
+              </h3>
+              <p className="text-brand-600 mb-4">
+                Contrató su seguro cuando facturaba 40.000 €. Tres años después facturaba casi 2 millones y sus clientes eran grandes corporaciones. Su RC seguía con límites de fase semilla.
+              </p>
+              <p className="text-sm text-brand-500 font-medium">
+                Desalineación detectada: límites y capitales obsoletos
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================ */}
+      {/* CREDIBILIDAD */}
+      {/* ============================================ */}
+      <section className="section-padding bg-white">
+        <div className="container-narrow">
+          <div className="text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-brand-900 mb-8">
+              Trayectoria
+            </h2>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <div className="p-6">
+                <p className="text-4xl font-bold text-brand-900 mb-2">10+</p>
+                <p className="text-brand-600">años en seguros</p>
+              </div>
+              <div className="p-6">
+                <p className="text-4xl font-bold text-brand-900 mb-2">5+</p>
+                <p className="text-brand-600">años en startups</p>
+              </div>
+              <div className="p-6">
+                <p className="text-4xl font-bold text-brand-900 mb-2">Actuario</p>
+                <p className="text-brand-600">formación técnica</p>
+              </div>
+              <div className="p-6">
+                <p className="text-4xl font-bold text-brand-900 mb-2">Founder</p>
+                <p className="text-brand-600">experiencia directa</p>
+              </div>
+            </div>
+
+            <p className="mt-8 text-brand-600 max-w-2xl mx-auto">
+              He visto desde dentro cómo se diseñan pólizas, cómo se evalúan riesgos y cómo se resuelven siniestros. Y también he vivido lo que significa crear una empresa, pivotar y crecer sin que nadie te avise de que tu seguro se ha quedado atrás.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================ */}
+      {/* FAQ */}
+      {/* ============================================ */}
+      <section className="section-padding bg-brand-50">
+        <div className="container-narrow">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-brand-900 mb-4">
+              Preguntas frecuentes
+            </h2>
+          </div>
+
+          <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-brand-100">
+            {faqs.map((faq, index) => (
+              <FAQItem key={index} question={faq.question} answer={faq.answer} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================ */}
+      {/* PRIVACIDAD Y CONFIANZA */}
+      {/* ============================================ */}
+      <section className="py-12 bg-white border-t border-brand-100">
+        <div className="container-narrow">
+          <div className="flex items-start gap-4 p-6 bg-brand-50 rounded-xl">
+            <div className="p-2 bg-brand-100 rounded-lg shrink-0">
+              <IconLock className="w-6 h-6 text-brand-700" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-brand-900 mb-2">Tu información está protegida</h3>
+              <p className="text-brand-600 text-sm">
+                Toda la información que compartas durante la revisión se trata con absoluta confidencialidad. No compartimos datos con terceros ni los utilizamos para fines comerciales. La documentación que facilites se maneja con la misma sensibilidad profesional que exigirías a tu asesor legal o fiscal.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================ */}
+      {/* CTA FINAL */}
+      {/* ============================================ */}
+      <section id="solicitar" className="section-padding bg-brand-950 text-white">
+        <div className="container-narrow text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+            No se trata solo de si tienes seguro.
+            <br />
+            <span className="text-brand-300">Se trata de si tu seguro sigue cubriendo la empresa que existe hoy.</span>
+          </h2>
+
+          <p className="text-xl text-brand-200 mb-8 max-w-2xl mx-auto">
+            Puede que tu póliza siga describiendo una empresa que ya no existe. Averígualo en 30 minutos.
+          </p>
+
+          <div className="inline-flex flex-col items-center bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
+            <p className="text-sm text-brand-300 mb-2">Revisión de Riesgo Real</p>
+            <div className="flex items-baseline gap-3 mb-4">
+              <span className="text-5xl font-bold">99 €</span>
+              <span className="text-brand-300">· 30 minutos</span>
+            </div>
+            <a
+              href="#"
+              className="btn-primary bg-white text-brand-900 hover:bg-brand-100 w-full justify-center text-lg py-5"
+            >
+              Solicita tu revisión experta de treinta minutos
+            </a>
+            <p className="text-xs text-brand-400 mt-4">
+              Videollamada con un experto. Sin compromisos posteriores.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================ */}
+      {/* FOOTER */}
+      {/* ============================================ */}
+      <footer className="bg-brand-900 text-white py-12">
+        <div className="container-wide">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="flex items-center gap-2">
+              <IconShield className="w-6 h-6" />
+              <span className="font-semibold">segurostartup.com</span>
+            </div>
+
+            <nav className="flex flex-wrap items-center justify-center gap-6 text-sm text-brand-300">
+              <a href="#" className="hover:text-white transition-colors">Contacto</a>
+              <a href="#" className="hover:text-white transition-colors">Aviso legal</a>
+              <a href="#" className="hover:text-white transition-colors">Política de privacidad</a>
+              <a href="#" className="hover:text-white transition-colors">Cookies</a>
+            </nav>
+          </div>
+
+          <div className="mt-8 pt-8 border-t border-white/10 text-center text-sm text-brand-400">
+            <p>© {new Date().getFullYear()} SeguroStartup. Todos los derechos reservados.</p>
+          </div>
+        </div>
+      </footer>
+    </main>
+  )
+}
