@@ -93,7 +93,6 @@ function Riskometro() {
   const [riskData, setRiskData] = useState({
     level: 'alto',
     probability: 78,
-    exposure: 85000,
     explanation: ''
   })
 
@@ -110,19 +109,23 @@ function Riskometro() {
 
     const probability = Math.min(95, Math.round(35 + riskScore * 5.5))
 
-    const baseExposure: Record<string, number> = { '1-2': 30000, '2-5': 60000, '5-10': 120000, '10+': 250000 }
-    const exposure = baseExposure[formData.facturacion] || 50000
-
     const growthLabels: Record<string, string> = { '1-2': 'x1-x2', '2-5': 'x2-x5', '5-10': 'x5-x10', '10+': 'más de x10' }
     const timeLabels: Record<string, string> = { 'menos1': 'hace menos de 1 año', '1-2': 'hace 1-2 años', '2-3': 'hace 2-3 años', 'mas3': 'hace más de 3 años', 'nosabe': 'un periodo indeterminado' }
-
-    const explanation = `Con un crecimiento de ${growthLabels[formData.facturacion] || 'significativo'} en los últimos 12-18 meses y seguros contratados ${timeLabels[formData.seguros] || 'hace tiempo'}, ${probability >= 60 ? 'es muy probable que tus coberturas, capitales y actividad declarada estén desalineados con tu negocio actual' : 'podrían existir gaps entre tu cobertura actual y tu situación real'}. Un siniestro en estas condiciones podría suponer un coste no cubierto de hasta ${exposure.toLocaleString('es-ES')} €.`
 
     let level = 'bajo'
     if (probability >= 70) level = 'alto'
     else if (probability >= 50) level = 'moderado'
 
-    setRiskData({ level, probability, exposure, explanation })
+    // Texto de impacto según nivel de riesgo
+    const impactText = level === 'alto'
+      ? 'varios años de facturación de tu empresa'
+      : level === 'moderado'
+      ? 'varios meses de facturación de tu empresa'
+      : 'una parte significativa de tu facturación'
+
+    const explanation = `Con un crecimiento de ${growthLabels[formData.facturacion] || 'significativo'} en los últimos 12-18 meses y seguros contratados ${timeLabels[formData.seguros] || 'hace tiempo'}, ${probability >= 60 ? 'es muy probable que tus coberturas, capitales y actividad declarada estén desalineados con tu negocio actual' : 'es probable que tus coberturas, capitales y/o actividad declarada estén desalineados con tu negocio actual'}. Un siniestro en estas condiciones podría suponeros un coste de indemnización por valor similar a ${impactText}.`
+
+    setRiskData({ level, probability, explanation })
     setShowPopup(true)
   }
 
@@ -287,15 +290,11 @@ function Riskometro() {
               </p>
             </div>
 
-            {/* Métricas */}
-            <div className="grid grid-cols-2 gap-3 px-6 mb-4">
-              <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-xl p-4 text-center border border-red-200/50">
-                <p className="text-2xl font-bold text-red-600">{riskData.exposure.toLocaleString('es-ES')} €</p>
-                <p className="text-xs text-brand-600 mt-1">Exposición estimada en caso de siniestro</p>
-              </div>
-              <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-4 text-center border border-orange-200/50">
-                <p className="text-2xl font-bold text-orange-600">{riskData.probability}%</p>
-                <p className="text-xs text-brand-600 mt-1">Probabilidad de que tu seguro no te cubra</p>
+            {/* Métrica */}
+            <div className="px-6 mb-4">
+              <div className={`rounded-xl p-5 text-center border ${riskData.level === 'alto' ? 'bg-gradient-to-br from-red-50 to-red-100 border-red-200/50' : riskData.level === 'moderado' ? 'bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200/50' : 'bg-gradient-to-br from-yellow-50 to-yellow-100 border-yellow-200/50'}`}>
+                <p className={`text-4xl font-bold ${riskData.level === 'alto' ? 'text-red-600' : riskData.level === 'moderado' ? 'text-orange-600' : 'text-yellow-600'}`}>{riskData.probability}%</p>
+                <p className="text-sm text-brand-600 mt-1">Probabilidad de que tu seguro no te cubra</p>
               </div>
             </div>
 
