@@ -2,55 +2,64 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @layer base {
   html {
     scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   body {
     @apply antialiased text-brand-900 bg-white;
+    font-feature-settings: "cv11", "ss01";
+    letter-spacing: -0.011em;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    letter-spacing: -0.025em;
+    font-weight: 600;
+  }
+
+  h1 {
+    letter-spacing: -0.035em;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-white bg-brand-900 rounded-lg transition-all duration-200 hover:bg-brand-800 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2;
+    @apply inline-flex items-center justify-center px-7 py-3.5 text-base font-medium text-white bg-brand-900 rounded-full transition-all duration-300 ease-out;
+    @apply hover:bg-brand-800 hover:scale-[1.02] active:scale-[0.98];
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-brand-900 bg-brand-100 rounded-lg transition-all duration-200 hover:bg-brand-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2;
+    @apply inline-flex items-center justify-center px-7 py-3.5 text-base font-medium text-brand-900 bg-brand-100 rounded-full transition-all duration-300 ease-out;
+    @apply hover:bg-brand-200 hover:scale-[1.02] active:scale-[0.98];
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2;
   }
 
   .section-padding {
-    @apply py-20 md:py-28 lg:py-32;
+    @apply py-24 md:py-32 lg:py-40;
   }
 
   .container-narrow {
-    @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+    @apply max-w-3xl mx-auto px-5 sm:px-6 lg:px-8;
   }
 
   .container-wide {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+    @apply max-w-6xl mx-auto px-5 sm:px-6 lg:px-8;
+  }
+
+  .card {
+    @apply bg-white rounded-2xl border border-brand-100/80 p-6 md:p-8;
+    @apply transition-all duration-300 ease-out;
+    @apply hover:border-brand-200 hover:shadow-lg hover:shadow-brand-900/5;
   }
 
   .gradient-text {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-800 via-accent-600 to-brand-900;
-  }
-
-  .card {
-    @apply bg-white rounded-2xl border border-brand-100 p-6 md:p-8 shadow-sm hover:shadow-md transition-shadow duration-300;
-  }
-
-  .riskometer-ring {
-    @apply absolute inset-0 rounded-full border-4 border-brand-100;
-  }
-
-  .riskometer-progress {
-    stroke-dasharray: 283;
-    stroke-dashoffset: 70;
-    transition: stroke-dashoffset 1s ease-in-out;
   }
 }
 
@@ -60,20 +69,41 @@
   }
 }
 
-/* Custom scrollbar */
+/* Minimal scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-brand-50;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-brand-300 rounded-full;
+  @apply bg-brand-200 rounded-full;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-brand-400;
+  @apply bg-brand-300;
+}
+
+/* Selection color */
+::selection {
+  @apply bg-brand-200 text-brand-900;
+}
+
+/* Focus visible styles */
+:focus-visible {
+  @apply outline-none ring-2 ring-brand-500 ring-offset-2;
+}
+
+/* Smooth image loading */
+img {
+  @apply transition-opacity duration-300;
+}
+
+/* Line through animation */
+.line-through {
+  text-decoration-thickness: 2px;
+  text-decoration-color: theme('colors.brand.400');
 }

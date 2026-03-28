@@ -263,11 +263,11 @@ function Riskometro() {
                 href="#solicitar"
                 className="w-full btn-primary flex items-center justify-center gap-2"
               >
-                Ver mi evaluación completa
+                Solicita tu llamada
                 <IconArrowRight className="w-5 h-5" />
               </a>
               <p className="text-xs text-brand-500 text-center mt-3">
-                Revisión experta de 30 minutos por 99 €
+                30 min · <span className="line-through">99 €</span> <span className="text-green-600 font-medium">Gratis por lanzamiento</span>
               </p>
             </div>
           </div>
@@ -318,7 +318,7 @@ export default function Home() {
     },
     {
       question: '¿Esto es para cualquier empresa?',
-      answer: 'No. Está pensado para startups y negocios de alto crecimiento en España que han evolucionado significativamente desde que contrataron sus seguros: han pivotado, crecido en facturación, expandido operaciones o cambiado de modelo de negocio.'
+      answer: 'No. Está pensado para startups y negocios de alto crecimiento con domicilio social y sede principal en España que han evolucionado significativamente desde que contrataron sus seguros: han pivotado, crecido en facturación, expandido operaciones o cambiado de modelo de negocio.'
     },
     {
       question: '¿Qué pasa si ya tengo pólizas contratadas?',
@@ -333,8 +333,8 @@ export default function Home() {
       answer: 'Te llevas una evaluación inicial con recomendaciones concretas. Si necesitas ayuda adicional para implementar cambios o profundizar en el análisis, podemos hablar de servicios complementarios, pero no hay ningún compromiso.'
     },
     {
-      question: '¿Por qué es de pago?',
-      answer: 'Porque estás pagando por criterio experto aplicado a tu caso concreto, no por una plantilla genérica. Los 30 minutos de revisión están respaldados por más de 10 años de experiencia en seguros y más de 5 en el ecosistema startup.'
+      question: '¿Por qué será de pago?',
+      answer: 'Porque estarás pagando por criterio experto aplicado a tu caso concreto, no por una plantilla genérica. Los 30 minutos de revisión están respaldados por más de 15 años de experiencia en seguros y más de 10 en el ecosistema startup. Durante el lanzamiento, las primeras revisiones son gratuitas.'
     },
     {
       question: '¿Qué tipo de información tengo que compartir?',
@@ -352,7 +352,7 @@ export default function Home() {
           <p className="text-sm font-medium">
             <span className="text-brand-300">Para</span>{' '}
             <span className="text-white">startups y negocios de alto crecimiento</span>{' '}
-            <span className="text-brand-300">en España</span>
+            <span className="text-brand-300">con sede en España</span>
           </p>
         </div>
       </div>
@@ -367,7 +367,7 @@ export default function Home() {
             <span className="text-xl font-bold text-brand-900">segurostartup</span>
           </a>
           <a href="#solicitar" className="hidden sm:inline-flex btn-primary text-sm py-2.5 px-5">
-            Solicitar revisión
+            Solicita tu llamada
           </a>
         </div>
       </header>
@@ -387,22 +387,21 @@ export default function Home() {
             </p>
 
             {/* Precio y CTA */}
-            <div className="inline-flex flex-col sm:flex-row items-center gap-4 sm:gap-6 bg-white rounded-2xl p-4 sm:p-6 shadow-lg border border-brand-100">
-              <div className="text-center sm:text-left">
-                <p className="text-sm text-brand-500 mb-1">Revisión de Riesgo Real</p>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-4xl font-bold text-brand-900">99 €</span>
-                  <span className="text-brand-500">· 30 minutos · videollamada</span>
-                </div>
+            <div className="inline-flex flex-col items-center bg-white rounded-2xl p-6 sm:p-8 shadow-lg border border-brand-100">
+              <p className="text-sm text-brand-500 mb-3">Revisión de Riesgo Real · 30 minutos</p>
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-2xl text-brand-400 line-through">99 €</span>
+                <span className="text-4xl font-bold text-brand-900">Gratis</span>
               </div>
-              <a href="#solicitar" className="btn-primary whitespace-nowrap">
-                Solicita tu revisión experta de treinta minutos
+              <p className="text-sm text-green-600 font-medium mb-5">Promoción de lanzamiento · Plazas limitadas</p>
+              <a href="#solicitar" className="btn-primary">
+                Solicita tu llamada
               </a>
             </div>
 
             {/* Microfrase de autoridad */}
             <p className="mt-6 text-sm text-brand-500">
-              Más de 10 años en seguros. Más de 5 en startups. Visión actuarial + mentalidad founder.
+              Más de 15 años en seguros. Más de 10 en el ecosistema startup. Visión actuarial + mentalidad founder.
             </p>
           </div>
 
@@ -594,7 +593,7 @@ export default function Home() {
                 Qué incluye la Revisión de Riesgo Real
               </h2>
               <p className="text-lg text-brand-600 mb-8">
-                99 € por 30 minutos de criterio experto aplicado a tu caso concreto. Esto es lo que te llevas:
+                30 minutos de criterio experto aplicado a tu caso concreto. Esto es lo que te llevas:
               </p>
 
               <ul className="space-y-4">
@@ -623,11 +622,13 @@ export default function Home() {
 
             <div className="bg-brand-50 rounded-2xl p-8 md:p-10">
               <div className="text-center">
-                <p className="text-sm font-medium text-brand-500 uppercase tracking-wider mb-2">Revisión de Riesgo Real</p>
-                <div className="flex items-baseline justify-center gap-2 mb-4">
-                  <span className="text-5xl font-bold text-brand-900">99 €</span>
+                <p className="text-sm font-medium text-brand-500 uppercase tracking-wider mb-3">Revisión de Riesgo Real</p>
+                <div className="flex items-center justify-center gap-3 mb-2">
+                  <span className="text-2xl text-brand-400 line-through">99 €</span>
+                  <span className="text-4xl font-bold text-brand-900">Gratis</span>
                 </div>
-                <div className="flex items-center justify-center gap-4 text-brand-600 mb-8">
+                <p className="text-sm text-green-600 font-medium mb-4">Promoción de lanzamiento</p>
+                <div className="flex items-center justify-center gap-4 text-brand-600 mb-6">
                   <span className="flex items-center gap-1.5">
                     <IconClock className="w-5 h-5" />
                     30 minutos
@@ -635,8 +636,8 @@ export default function Home() {
                   <span>·</span>
                   <span>Videollamada</span>
                 </div>
-                <a href="#solicitar" className="btn-primary w-full justify-center text-lg py-5">
-                  Solicita tu revisión experta de treinta minutos
+                <a href="#solicitar" className="btn-primary w-full justify-center">
+                  Solicita tu llamada
                 </a>
               </div>
             </div>
@@ -662,13 +663,13 @@ export default function Home() {
             <div className="card">
               <h3 className="text-xl font-semibold text-brand-900 mb-4">Visión actuarial real</h3>
               <p className="text-brand-600">
-                Más de 10 años trabajando en el sector asegurador. Entendemos cómo funcionan las pólizas por dentro, no solo cómo se venden.
+                Más de 15 años trabajando en el sector asegurador. Entendemos cómo funcionan las pólizas por dentro, no solo cómo se venden.
               </p>
             </div>
             <div className="card">
               <h3 className="text-xl font-semibold text-brand-900 mb-4">Experiencia startup real</h3>
               <p className="text-brand-600">
-                Más de 5 años en el ecosistema startup. Sabemos lo que significa pivotar, crecer rápido y operar con incertidumbre.
+                Más de 10 años en el ecosistema startup en España. Sabemos lo que significa pivotar, crecer rápido y operar con incertidumbre.
               </p>
             </div>
             <div className="card">
@@ -779,33 +780,32 @@ export default function Home() {
       {/* ============================================ */}
       <section className="section-padding bg-white">
         <div className="container-narrow">
-          <div className="text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-brand-900 mb-8">
+          <div className="max-w-2xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-brand-900 mb-12 text-center">
               Trayectoria
             </h2>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              <div className="p-6">
-                <p className="text-4xl font-bold text-brand-900 mb-2">10+</p>
-                <p className="text-brand-600">años en seguros</p>
+            <div className="space-y-8">
+              <div className="flex items-start gap-6">
+                <div className="w-16 h-16 bg-brand-100 rounded-2xl flex items-center justify-center shrink-0">
+                  <span className="text-2xl font-bold text-brand-700">15+</span>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-brand-900 mb-1">Formación y experiencia actuarial</h3>
+                  <p className="text-brand-600">Más de 15 años en el sector asegurador. He visto desde dentro cómo se diseñan pólizas, cómo se evalúan riesgos y cómo se resuelven siniestros.</p>
+                </div>
               </div>
-              <div className="p-6">
-                <p className="text-4xl font-bold text-brand-900 mb-2">5+</p>
-                <p className="text-brand-600">años en startups</p>
-              </div>
-              <div className="p-6">
-                <p className="text-4xl font-bold text-brand-900 mb-2">Actuario</p>
-                <p className="text-brand-600">formación técnica</p>
-              </div>
-              <div className="p-6">
-                <p className="text-4xl font-bold text-brand-900 mb-2">Founder</p>
-                <p className="text-brand-600">experiencia directa</p>
+
+              <div className="flex items-start gap-6">
+                <div className="w-16 h-16 bg-brand-100 rounded-2xl flex items-center justify-center shrink-0">
+                  <span className="text-2xl font-bold text-brand-700">10+</span>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-brand-900 mb-1">Conocimiento profundo del ecosistema startup en España</h3>
+                  <p className="text-brand-600">Más de 10 años trabajando con startups. He vivido lo que significa crear una empresa, pivotar y crecer sin que nadie te avise de que tu seguro se ha quedado atrás.</p>
+                </div>
               </div>
             </div>
-
-            <p className="mt-8 text-brand-600 max-w-2xl mx-auto">
-              He visto desde dentro cómo se diseñan pólizas, cómo se evalúan riesgos y cómo se resuelven siniestros. Y también he vivido lo que significa crear una empresa, pivotar y crecer sin que nadie te avise de que tu seguro se ha quedado atrás.
-            </p>
           </div>
         </div>
       </section>
@@ -853,29 +853,31 @@ export default function Home() {
       {/* ============================================ */}
       <section id="solicitar" className="section-padding bg-brand-950 text-white">
         <div className="container-narrow text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 leading-tight">
             No se trata solo de si tienes seguro.
-            <br />
-            <span className="text-brand-300">Se trata de si tu seguro sigue cubriendo la empresa que existe hoy.</span>
           </h2>
+          <p className="text-2xl text-brand-300 mb-8">
+            Se trata de si tu seguro sigue cubriendo la empresa que existe hoy.
+          </p>
 
-          <p className="text-xl text-brand-200 mb-8 max-w-2xl mx-auto">
+          <p className="text-lg text-brand-200 mb-10 max-w-xl mx-auto">
             Puede que tu póliza siga describiendo una empresa que ya no existe. Averígualo en 30 minutos.
           </p>
 
-          <div className="inline-flex flex-col items-center bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
-            <p className="text-sm text-brand-300 mb-2">Revisión de Riesgo Real</p>
-            <div className="flex items-baseline gap-3 mb-4">
-              <span className="text-5xl font-bold">99 €</span>
-              <span className="text-brand-300">· 30 minutos</span>
+          <div className="inline-flex flex-col items-center">
+            <p className="text-sm text-brand-400 mb-3">Revisión de Riesgo Real · 30 minutos</p>
+            <div className="flex items-center gap-3 mb-2">
+              <span className="text-xl text-brand-500 line-through">99 €</span>
+              <span className="text-4xl font-bold text-white">Gratis</span>
             </div>
+            <p className="text-sm text-green-400 font-medium mb-6">Promoción de lanzamiento · Plazas limitadas</p>
             <a
               href="#"
-              className="btn-primary bg-white text-brand-900 hover:bg-brand-100 w-full justify-center text-lg py-5"
+              className="btn-primary bg-white text-brand-900 hover:bg-brand-100 px-10 py-4"
             >
-              Solicita tu revisión experta de treinta minutos
+              Solicita tu llamada
             </a>
-            <p className="text-xs text-brand-400 mt-4">
+            <p className="text-xs text-brand-500 mt-5">
               Videollamada con un experto. Sin compromisos posteriores.
             </p>
           </div>
