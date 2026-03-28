@@ -79,201 +79,247 @@ const IconChevronDown = ({ className = "w-5 h-5" }: { className?: string }) => (
 )
 
 // ============================================
-// COMPONENTE RISKOMETRO
+// COMPONENTE RISKOMETRO CON POPUP
 // ============================================
 
 function Riskometro() {
   const [formData, setFormData] = useState({
     actividad: '',
     facturacion: '',
-    actividadAnterior: '',
     paises: '',
     seguros: ''
   })
+  const [showPopup, setShowPopup] = useState(false)
+  const [riskData, setRiskData] = useState({
+    level: 'alto',
+    probability: 78,
+    exposure: 85000,
+    explanation: ''
+  })
 
-  const riskLevel = 75 // Simulado - Alto riesgo
+  const calculateRisk = () => {
+    let riskScore = 0
+    const growthMultipliers: Record<string, number> = { '1-2': 1, '2-5': 3, '5-10': 5, '10+': 8 }
+    const timeMultipliers: Record<string, number> = { 'menos1': 1, '1-2': 2, '2-3': 3, 'mas3': 4, 'nosabe': 3 }
+
+    riskScore += (growthMultipliers[formData.facturacion] || 2)
+    riskScore += (timeMultipliers[formData.seguros] || 2)
+
+    if (formData.paises === 'internacional') riskScore += 3
+    else if (formData.paises === 'ue') riskScore += 1
+
+    const probability = Math.min(95, Math.round(35 + riskScore * 5.5))
+
+    const baseExposure: Record<string, number> = { '1-2': 30000, '2-5': 60000, '5-10': 120000, '10+': 250000 }
+    const exposure = baseExposure[formData.facturacion] || 50000
+
+    const growthLabels: Record<string, string> = { '1-2': 'x1-x2', '2-5': 'x2-x5', '5-10': 'x5-x10', '10+': 'más de x10' }
+    const timeLabels: Record<string, string> = { 'menos1': 'hace menos de 1 año', '1-2': 'hace 1-2 años', '2-3': 'hace 2-3 años', 'mas3': 'hace más de 3 años', 'nosabe': 'un periodo indeterminado' }
+
+    const explanation = `Con un crecimiento de ${growthLabels[formData.facturacion] || 'significativo'} en los últimos 12-18 meses y seguros contratados ${timeLabels[formData.seguros] || 'hace tiempo'}, ${probability >= 60 ? 'es muy probable que tus coberturas, capitales y actividad declarada estén desalineados con tu negocio actual' : 'podrían existir gaps entre tu cobertura actual y tu situación real'}. Un siniestro en estas condiciones podría suponer un coste no cubierto de hasta ${exposure.toLocaleString('es-ES')} €.`
+
+    let level = 'bajo'
+    if (probability >= 70) level = 'alto'
+    else if (probability >= 50) level = 'moderado'
+
+    setRiskData({ level, probability, exposure, explanation })
+    setShowPopup(true)
+  }
+
+  const riskLevel = 75
 
   return (
-    <div className="bg-gradient-to-br from-brand-950 via-brand-900 to-brand-800 rounded-3xl p-8 md:p-12 text-white relative overflow-hidden">
-      {/* Decoración de fondo */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-accent-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-      <div className="absolute bottom-0 left-0 w-64 h-64 bg-risk-high/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+    <>
+      <div className="bg-gradient-to-br from-brand-950 via-brand-900 to-brand-800 rounded-3xl p-8 md:p-12 text-white relative overflow-hidden">
+        {/* Decoración de fondo */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-accent-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-risk-high/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
 
-      <div className="relative z-10">
-        <div className="text-center mb-8">
-          <span className="inline-block px-4 py-1.5 bg-white/10 rounded-full text-sm font-medium mb-4">
-            riskometro
-          </span>
-          <h2 className="text-2xl md:text-3xl font-bold mb-3">
-            Si hoy tuvieras un siniestro relevante, ¿tu cobertura actual aguantaría el negocio que tienes ahora?
-          </h2>
-          <p className="text-brand-200 max-w-2xl mx-auto">
-            Comprueba en segundos si tu seguro sigue alineado con la realidad de tu empresa.
-          </p>
-        </div>
+        <div className="relative z-10">
+          <div className="text-center mb-8">
+            <span className="inline-block px-4 py-1.5 bg-white/10 rounded-full text-sm font-medium mb-4">
+              riskometro
+            </span>
+            <h2 className="text-2xl md:text-3xl font-bold mb-3">
+              Si hoy tuvieras un siniestro relevante, ¿tu cobertura actual aguantaría el negocio que tienes ahora?
+            </h2>
+            <p className="text-brand-200 max-w-2xl mx-auto">
+              Comprueba en segundos si tu seguro sigue alineado con la realidad de tu empresa.
+            </p>
+          </div>
 
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
-          {/* Panel de indicadores */}
-          <div className="space-y-6">
-            {/* Indicador principal circular */}
-            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <p className="text-brand-300 text-sm mb-1">Nivel de riesgo estimado</p>
-                  <p className="text-3xl font-bold text-risk-high">Alto</p>
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+            {/* Panel de indicadores */}
+            <div className="space-y-6">
+              {/* Indicador principal circular */}
+              <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <p className="text-brand-300 text-sm mb-1">Nivel de riesgo estimado</p>
+                    <p className="text-3xl font-bold text-risk-high">Alto</p>
+                  </div>
+                  <div className="relative w-24 h-24">
+                    <svg className="w-24 h-24 -rotate-90" viewBox="0 0 100 100">
+                      <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="8" />
+                      <circle cx="50" cy="50" r="45" fill="none" stroke="#ef4444" strokeWidth="8" strokeLinecap="round" strokeDasharray={`${riskLevel * 2.83} 283`} className="transition-all duration-1000" />
+                    </svg>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="text-2xl font-bold">{riskLevel}%</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="relative w-24 h-24">
-                  <svg className="w-24 h-24 -rotate-90" viewBox="0 0 100 100">
-                    <circle
-                      cx="50"
-                      cy="50"
-                      r="45"
-                      fill="none"
-                      stroke="rgba(255,255,255,0.1)"
-                      strokeWidth="8"
-                    />
-                    <circle
-                      cx="50"
-                      cy="50"
-                      r="45"
-                      fill="none"
-                      stroke="#ef4444"
-                      strokeWidth="8"
-                      strokeLinecap="round"
-                      strokeDasharray={`${riskLevel * 2.83} 283`}
-                      className="transition-all duration-1000"
-                    />
-                  </svg>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-2xl font-bold">{riskLevel}%</span>
+
+                {/* Métricas secundarias */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-white/5 rounded-xl p-4">
+                    <p className="text-brand-400 text-xs uppercase tracking-wider mb-1">Desalineación</p>
+                    <p className="text-xl font-semibold text-amber-400">Probable</p>
+                  </div>
+                  <div className="bg-white/5 rounded-xl p-4">
+                    <p className="text-brand-400 text-xs uppercase tracking-wider mb-1">Impacto potencial</p>
+                    <p className="text-xl font-semibold text-risk-high">Significativo</p>
                   </div>
                 </div>
               </div>
 
-              {/* Métricas secundarias */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white/5 rounded-xl p-4">
-                  <p className="text-brand-400 text-xs uppercase tracking-wider mb-1">Desalineación</p>
-                  <p className="text-xl font-semibold text-amber-400">Probable</p>
-                </div>
-                <div className="bg-white/5 rounded-xl p-4">
-                  <p className="text-brand-400 text-xs uppercase tracking-wider mb-1">Impacto potencial</p>
-                  <p className="text-xl font-semibold text-risk-high">Significativo</p>
+              {/* Escenario de impacto */}
+              <div className="bg-risk-high/10 border border-risk-high/30 rounded-2xl p-6">
+                <div className="flex items-start gap-4">
+                  <div className="p-2 bg-risk-high/20 rounded-lg shrink-0">
+                    <IconWarning className="w-6 h-6 text-risk-high" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-white mb-2">Peor escenario razonable</p>
+                    <p className="text-brand-200 text-sm leading-relaxed">
+                      Si ocurre un siniestro relevante con coberturas desalineadas, podrías enfrentarte a rechazos de indemnización, sublímites insuficientes o exclusiones no previstas. El coste puede superar varias veces la facturación mensual.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Escenario de impacto */}
-            <div className="bg-risk-high/10 border border-risk-high/30 rounded-2xl p-6">
-              <div className="flex items-start gap-4">
-                <div className="p-2 bg-risk-high/20 rounded-lg shrink-0">
-                  <IconWarning className="w-6 h-6 text-risk-high" />
-                </div>
+            {/* Mini formulario de diagnóstico */}
+            <div className="bg-white rounded-2xl p-6 md:p-8 text-brand-900">
+              <h3 className="text-lg font-semibold mb-6">Empieza tu diagnóstico</h3>
+
+              <div className="space-y-4">
                 <div>
-                  <p className="font-semibold text-white mb-2">Peor escenario razonable</p>
-                  <p className="text-brand-200 text-sm leading-relaxed">
-                    Si ocurre un siniestro relevante con coberturas desalineadas, podrías enfrentarte a rechazos de indemnización, sublímites insuficientes o exclusiones no previstas. El coste puede superar varias veces la facturación mensual.
-                  </p>
+                  <label className="block text-sm font-medium text-brand-700 mb-1.5">Actividad actual</label>
+                  <select className="w-full px-4 py-3 bg-brand-50 border border-brand-200 rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-transparent transition-all" value={formData.actividad} onChange={(e) => setFormData({...formData, actividad: e.target.value})}>
+                    <option value="">Selecciona tu sector</option>
+                    <option value="saas">SaaS / Software</option>
+                    <option value="marketplace">B2B Marketplace</option>
+                    <option value="ecommerce">E-commerce</option>
+                    <option value="fintech">FinTech</option>
+                    <option value="agencia">Agencia / Servicios</option>
+                    <option value="ai">AI / Machine Learning</option>
+                    <option value="eventos">Organización de eventos</option>
+                    <option value="otro">Otro</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-brand-700 mb-1.5">¿Por cuánto has multiplicado tu facturación en los últimos 12-18 meses?</label>
+                  <select className="w-full px-4 py-3 bg-brand-50 border border-brand-200 rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-transparent transition-all" value={formData.facturacion} onChange={(e) => setFormData({...formData, facturacion: e.target.value})}>
+                    <option value="">Selecciona un rango</option>
+                    <option value="1-2">Entre x1 y x2</option>
+                    <option value="2-5">Entre x2 y x5</option>
+                    <option value="5-10">Entre x5 y x10</option>
+                    <option value="10+">Más de x10</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-brand-700 mb-1.5">Países donde operas</label>
+                  <select className="w-full px-4 py-3 bg-brand-50 border border-brand-200 rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-transparent transition-all" value={formData.paises} onChange={(e) => setFormData({...formData, paises: e.target.value})}>
+                    <option value="">Selecciona una opción</option>
+                    <option value="espana">Solo España</option>
+                    <option value="ue">España + UE</option>
+                    <option value="internacional">Internacional (fuera UE)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-brand-700 mb-1.5">¿Cuándo contrataste tus seguros actuales?</label>
+                  <select className="w-full px-4 py-3 bg-brand-50 border border-brand-200 rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-transparent transition-all" value={formData.seguros} onChange={(e) => setFormData({...formData, seguros: e.target.value})}>
+                    <option value="">Selecciona una opción</option>
+                    <option value="menos1">Hace menos de 1 año</option>
+                    <option value="1-2">Hace 1-2 años</option>
+                    <option value="2-3">Hace 2-3 años</option>
+                    <option value="mas3">Hace más de 3 años</option>
+                    <option value="nosabe">No estoy seguro</option>
+                  </select>
                 </div>
               </div>
-            </div>
-          </div>
 
-          {/* Mini formulario de diagnóstico */}
-          <div className="bg-white rounded-2xl p-6 md:p-8 text-brand-900">
-            <h3 className="text-lg font-semibold mb-6">Empieza tu diagnóstico</h3>
-
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-brand-700 mb-1.5">
-                  Actividad actual
-                </label>
-                <select
-                  className="w-full px-4 py-3 bg-brand-50 border border-brand-200 rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-transparent transition-all"
-                  value={formData.actividad}
-                  onChange={(e) => setFormData({...formData, actividad: e.target.value})}
-                >
-                  <option value="">Selecciona tu sector</option>
-                  <option value="saas">SaaS / Software</option>
-                  <option value="marketplace">B2B Marketplace</option>
-                  <option value="ecommerce">E-commerce</option>
-                  <option value="fintech">FinTech</option>
-                  <option value="agencia">Agencia / Servicios</option>
-                  <option value="ai">AI / Machine Learning</option>
-                  <option value="eventos">Organización de eventos</option>
-                  <option value="otro">Otro</option>
-                </select>
+              <div className="mt-6 pt-6 border-t border-brand-100">
+                <button onClick={calculateRisk} className="w-full btn-primary flex items-center justify-center gap-2">
+                  Obtener diagnóstico
+                  <IconArrowRight className="w-5 h-5" />
+                </button>
+                <p className="text-xs text-brand-500 text-center mt-3">
+                  30 min · <span className="line-through">99 €</span> <span className="text-green-600 font-medium">Gratis por lanzamiento</span>
+                </p>
               </div>
-
-              <div>
-                <label className="block text-sm font-medium text-brand-700 mb-1.5">
-                  Facturación actual anual
-                </label>
-                <select
-                  className="w-full px-4 py-3 bg-brand-50 border border-brand-200 rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-transparent transition-all"
-                  value={formData.facturacion}
-                  onChange={(e) => setFormData({...formData, facturacion: e.target.value})}
-                >
-                  <option value="">Selecciona un rango</option>
-                  <option value="0-100k">Menos de 100.000 €</option>
-                  <option value="100k-500k">100.000 € - 500.000 €</option>
-                  <option value="500k-1m">500.000 € - 1M €</option>
-                  <option value="1m-5m">1M € - 5M €</option>
-                  <option value="5m+">Más de 5M €</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-brand-700 mb-1.5">
-                  Países donde operas
-                </label>
-                <select
-                  className="w-full px-4 py-3 bg-brand-50 border border-brand-200 rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-transparent transition-all"
-                  value={formData.paises}
-                  onChange={(e) => setFormData({...formData, paises: e.target.value})}
-                >
-                  <option value="">Selecciona una opción</option>
-                  <option value="espana">Solo España</option>
-                  <option value="ue">España + UE</option>
-                  <option value="internacional">Internacional (fuera UE)</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-brand-700 mb-1.5">
-                  ¿Cuándo contrataste tus seguros actuales?
-                </label>
-                <select
-                  className="w-full px-4 py-3 bg-brand-50 border border-brand-200 rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-transparent transition-all"
-                  value={formData.seguros}
-                  onChange={(e) => setFormData({...formData, seguros: e.target.value})}
-                >
-                  <option value="">Selecciona una opción</option>
-                  <option value="menos1">Hace menos de 1 año</option>
-                  <option value="1-2">Hace 1-2 años</option>
-                  <option value="2-3">Hace 2-3 años</option>
-                  <option value="mas3">Hace más de 3 años</option>
-                  <option value="nosabe">No estoy seguro</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="mt-6 pt-6 border-t border-brand-100">
-              <a
-                href="https://tidycal.com/juanmi"
-                className="w-full btn-primary flex items-center justify-center gap-2"
-              >
-                Solicita tu llamada
-                <IconArrowRight className="w-5 h-5" />
-              </a>
-              <p className="text-xs text-brand-500 text-center mt-3">
-                30 min · <span className="line-through">99 €</span> <span className="text-green-600 font-medium">Gratis por lanzamiento</span>
-              </p>
             </div>
           </div>
         </div>
       </div>
-    </div>
+
+      {/* POPUP DIAGNÓSTICO */}
+      {showPopup && (
+        <div className="fixed inset-0 bg-brand-950/70 backdrop-blur-sm z-[100] flex items-center justify-center p-4 animate-in fade-in duration-200" onClick={() => setShowPopup(false)}>
+          <div className="bg-white rounded-2xl w-full max-w-md max-h-[90vh] overflow-y-auto shadow-2xl animate-in slide-in-from-bottom-4 duration-300" onClick={(e) => e.stopPropagation()}>
+            <button onClick={() => setShowPopup(false)} className="absolute top-4 right-4 w-8 h-8 bg-brand-100 rounded-full flex items-center justify-center text-brand-600 hover:bg-brand-200 transition-colors">
+              ✕
+            </button>
+
+            {/* Header */}
+            <div className="p-8 pb-4 text-center">
+              <div className={`w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl ${riskData.level === 'alto' ? 'bg-red-100' : riskData.level === 'moderado' ? 'bg-orange-100' : 'bg-yellow-100'}`}>
+                {riskData.level === 'alto' ? '⚠️' : riskData.level === 'moderado' ? '⚡' : '🔍'}
+              </div>
+              <h2 className="text-xl font-bold text-brand-900 mb-2">
+                {riskData.level === 'alto' ? 'Riesgo alto de desalineación' : riskData.level === 'moderado' ? 'Riesgo moderado de desalineación' : 'Riesgo bajo, pero conviene revisar'}
+              </h2>
+              <p className="text-brand-600 text-sm">
+                {riskData.level === 'alto' ? 'Tu seguro probablemente no refleja la realidad actual de tu negocio.' : riskData.level === 'moderado' ? 'Es probable que algunas coberturas necesiten ajustes.' : 'Tu seguro parece razonablemente alineado, pero una revisión puede detectar gaps ocultos.'}
+              </p>
+            </div>
+
+            {/* Métricas */}
+            <div className="grid grid-cols-2 gap-3 px-6 mb-4">
+              <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-xl p-4 text-center border border-red-200/50">
+                <p className="text-2xl font-bold text-red-600">{riskData.exposure.toLocaleString('es-ES')} €</p>
+                <p className="text-xs text-brand-600 mt-1">Exposición estimada en caso de siniestro</p>
+              </div>
+              <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-4 text-center border border-orange-200/50">
+                <p className="text-2xl font-bold text-orange-600">{riskData.probability}%</p>
+                <p className="text-xs text-brand-600 mt-1">Probabilidad de que tu seguro no te cubra</p>
+              </div>
+            </div>
+
+            {/* Explicación */}
+            <div className="px-6 mb-6">
+              <div className="bg-brand-50 rounded-xl p-4 border-l-4 border-accent-500">
+                <p className="text-sm text-brand-700 leading-relaxed">{riskData.explanation}</p>
+              </div>
+            </div>
+
+            {/* CTA */}
+            <div className="px-6 pb-8">
+              <a href="https://tidycal.com/juanmi" className="w-full btn-primary bg-accent-500 hover:bg-accent-600 flex items-center justify-center gap-2 py-4">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+                Hablar con un experto en seguros
+              </a>
+              <p className="text-xs text-brand-500 text-center mt-3">30 min · Gratis por lanzamiento · Sin compromiso</p>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   )
 }
 
@@ -310,7 +356,7 @@ export default function Home() {
   const faqs = [
     {
       question: '¿Esto sustituye a mi corredor actual?',
-      answer: 'No. La Revisión de Riesgo Real es un servicio de diagnóstico independiente. No vendemos pólizas ni competimos con tu corredor. Si detectamos desalineaciones, te orientamos sobre cómo abordarlas, pero la decisión de cambiar de proveedor o renegociar siempre es tuya.'
+      answer: 'No. La Revisión de Riesgo Real es un servicio de diagnóstico independiente que en ningún caso pretende competir con tu corredor actual. Es como tener una "segunda opinión médica". Si detectamos desalineaciones, te orientamos sobre cómo abordarlas, pero la decisión de buscar alternativas es siempre tuya.'
     },
     {
       question: '¿Qué ocurre en la revisión de 30 minutos?',
@@ -326,7 +372,7 @@ export default function Home() {
     },
     {
       question: '¿Me vais a vender un seguro durante la llamada?',
-      answer: 'No. La revisión es puramente diagnóstica. Si identificamos necesidades, te orientamos sobre qué tipo de solución buscar, pero no vendemos productos durante la llamada ni después como parte de este servicio.'
+      answer: 'No. La revisión es puramente diagnóstica. Si identificamos necesidades, te orientamos sobre qué tipo de solución buscar. En caso de que tu correduría actual no pueda darte solución podemos ponerte en contacto con corredurías de seguros especializadas en modelos de negocio como el tuyo.'
     },
     {
       question: '¿Qué ocurre después de la revisión?',
@@ -383,7 +429,7 @@ export default function Home() {
               <span className="text-brand-600">Tu seguro, probablemente no.</span>
             </h1>
             <p className="text-xl md:text-2xl text-brand-600 mb-8 max-w-3xl mx-auto text-balance">
-              Ayudamos a startups y negocios de alto crecimiento a detectar si sus coberturas siguen encajando con su actividad real, su facturación actual y su nivel de riesgo.
+              Tras preguntar a tu IA de confianza ya tendrás una primera orientación sobre tu nivel de riesgo aproximado y si tu seguro cubre tu negocio realmente. Lo siguiente es hablar con nosotros.
             </p>
 
             {/* Precio y CTA */}
@@ -543,12 +589,17 @@ export default function Home() {
               Cómo funciona
             </h2>
             <p className="text-lg text-brand-300">
-              Tres pasos. Treinta minutos. Claridad sobre tu situación real.
+              Cuatro pasos. Treinta minutos. Claridad sobre tu situación real.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
+              {
+                step: '00',
+                title: 'Pregunta a tu IA de confianza',
+                description: 'Tras preguntar a tu IA de confianza ya tendrás una primera orientación sobre tu nivel de riesgo aproximado. Lo siguiente es hablar con nosotros.'
+              },
               {
                 step: '01',
                 title: 'Solicitas tu revisión',
@@ -566,14 +617,14 @@ export default function Home() {
               }
             ].map((item, index) => (
               <div key={index} className="relative">
-                <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 h-full">
-                  <span className="text-5xl font-bold text-white/10 mb-4 block">{item.step}</span>
-                  <h3 className="text-xl font-semibold text-white mb-3">{item.title}</h3>
-                  <p className="text-brand-300">{item.description}</p>
+                <div className={`backdrop-blur-sm rounded-2xl p-6 border h-full ${index === 0 ? 'bg-accent-500/10 border-accent-500/30' : 'bg-white/5 border-white/10'}`}>
+                  <span className={`text-4xl font-bold mb-3 block ${index === 0 ? 'text-accent-400' : 'text-white/10'}`}>{item.step}</span>
+                  <h3 className="text-lg font-semibold text-white mb-2">{item.title}</h3>
+                  <p className="text-brand-300 text-sm">{item.description}</p>
                 </div>
-                {index < 2 && (
-                  <div className="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2">
-                    <IconArrowRight className="w-8 h-8 text-white/20" />
+                {index < 3 && (
+                  <div className="hidden lg:block absolute top-1/2 -right-3 transform -translate-y-1/2">
+                    <IconArrowRight className="w-6 h-6 text-white/20" />
                   </div>
                 )}
               </div>
