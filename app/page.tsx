@@ -260,7 +260,7 @@ function Riskometro() {
 
             <div className="mt-6 pt-6 border-t border-brand-100">
               <a
-                href="#solicitar"
+                href="https://tidycal.com/juanmi"
                 className="w-full btn-primary flex items-center justify-center gap-2"
               >
                 Solicita tu llamada
@@ -366,7 +366,7 @@ export default function Home() {
             <IconShield className="w-8 h-8 text-brand-900" />
             <span className="text-xl font-bold text-brand-900">segurostartup</span>
           </a>
-          <a href="#solicitar" className="hidden sm:inline-flex btn-primary text-sm py-2.5 px-5">
+          <a href="https://tidycal.com/juanmi" className="hidden sm:inline-flex btn-primary text-sm py-2.5 px-5">
             Solicita tu llamada
           </a>
         </div>
@@ -394,7 +394,7 @@ export default function Home() {
                 <span className="text-4xl font-bold text-brand-900">Gratis</span>
               </div>
               <p className="text-sm text-green-600 font-medium mb-5">Promoción de lanzamiento · Plazas limitadas</p>
-              <a href="#solicitar" className="btn-primary">
+              <a href="https://tidycal.com/juanmi" className="btn-primary">
                 Solicita tu llamada
               </a>
             </div>
@@ -636,7 +636,7 @@ export default function Home() {
                   <span>·</span>
                   <span>Videollamada</span>
                 </div>
-                <a href="#solicitar" className="btn-primary w-full justify-center">
+                <a href="https://tidycal.com/juanmi" className="btn-primary w-full justify-center">
                   Solicita tu llamada
                 </a>
               </div>
@@ -805,6 +805,20 @@ export default function Home() {
                   <p className="text-brand-600">Más de 10 años trabajando con startups. He vivido lo que significa crear una empresa, pivotar y crecer sin que nadie te avise de que tu seguro se ha quedado atrás.</p>
                 </div>
               </div>
+
+              <div className="pt-6 mt-6 border-t border-brand-100">
+                <a
+                  href="https://www.linkedin.com/in/juanmilopez"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-brand-600 hover:text-brand-900 transition-colors"
+                >
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                  </svg>
+                  <span className="text-sm font-medium">Ver perfil en LinkedIn</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -872,7 +886,7 @@ export default function Home() {
             </div>
             <p className="text-sm text-green-400 font-medium mb-6">Promoción de lanzamiento · Plazas limitadas</p>
             <a
-              href="#"
+              href="https://tidycal.com/juanmi"
               className="btn-primary bg-white text-brand-900 hover:bg-brand-100 px-10 py-4"
             >
               Solicita tu llamada
@@ -896,6 +910,7 @@ export default function Home() {
             </div>
 
             <nav className="flex flex-wrap items-center justify-center gap-6 text-sm text-brand-300">
+              <a href="https://www.linkedin.com/in/juanmilopez" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">LinkedIn</a>
               <a href="#" className="hover:text-white transition-colors">Contacto</a>
               <a href="#" className="hover:text-white transition-colors">Aviso legal</a>
               <a href="#" className="hover:text-white transition-colors">Política de privacidad</a>
